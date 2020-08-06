@@ -1,22 +1,26 @@
-#Board
-game_board = ["-", "-", "-",
-              "-", "-", "-",
-              "-", "-", "-"]
+
 #Variables
 turn = 0
-p_choice = 0
+p_move = 0
+p_choice = False
+p_newgame = False
+game_rerun =True
 game_run = True
 game_win = False
 game_tie = False
+game_board = ["-", "-", "-","-", "-", "-","-", "-", "-"]
 current_player = "X"
 
 
 def show_board():
+    print("-" * 50)
     print(f"{game_board[0]}  |  {game_board[1]}  |  {game_board[2]}")
     print(f"{game_board[3]}  |  {game_board[4]}  |  {game_board[5]}")
     print(f"{game_board[6]}  |  {game_board[7]}  |  {game_board[8]}")
 
-#Win and tie
+
+#--------------------------Functions------------------------
+#Check Fuctions
 def win():
     horizontal_win()
     vertical_win()
@@ -50,6 +54,7 @@ def vertical_win():
         game_run = False
         game_win = True
 
+
 def diag_win():
     global game_run
     global game_win
@@ -69,11 +74,12 @@ def tie():
         game_tie = True
 
 
-#player
+#Player Functions
 def player_input():
-    global p_choice
+    global p_move
     print(f"{current_player} Turn")
-    p_choice = int(input("Your move: "))
+    p_move = int(input("Your move: "))
+
 
 def player_swap(player):
     global current_player
@@ -82,35 +88,63 @@ def player_swap(player):
     else:
         current_player = "X"
 
-#logic
+
+def player_check():
+    global p_move
+    while p_move < 1 or p_move > 9:
+        print("Move is not allowed")
+        p_move = int(input("Your move: "))
+
+
+def player_newgame():
+    global turn
+    global p_choice
+    global game_run
+    global game_rerun
+    global game_win
+    global game_tie
+    global game_board
+    p_choice = input("Do you want to start a new game? (y/n): ")
+    if p_choice == "y":
+        turn = 0
+        game_run = True
+        game_win = False
+        game_tie = False
+        game_board = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+    else:
+        game_rerun = False
+
+
+#Game Functions
 def change_board():
     global turn
-    game_board[p_choice - 1] = current_player
+    game_board[p_move - 1] = current_player
     turn +=1
 
-def game():
+
+def main():
     show_board()
     player_input()
-    player_input_check()
+    player_check()
     change_board()
-    win()
     tie()
-
-def player_input_check():
-    global p_choice
-    while p_choice < 1 or p_choice > 9:
-        print("Move is not allowed")
-        p_choice = int(input("Your move: "))
+    win()
 
 
-#game
-while game_run == True:
-    game()
-    if game_run == True:
-         player_swap(current_player)
-if game_win == True:
-    show_board()
-    print(f"{current_player} win")
-if game_tie == True:
-    show_board()
-    print("Tie")
+def run():
+    while game_run == True:
+        main()
+        if game_run == True:
+             player_swap(current_player)
+    if game_win == True:
+        show_board()
+        print(f"Game result: {current_player} win")
+    if game_tie == True:
+        show_board()
+        print("Game result: Tie")
+    player_newgame()
+
+
+#--------------------------Game------------------------
+while game_rerun == True:
+    run()
