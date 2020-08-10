@@ -4,7 +4,7 @@ turn = 0
 p_move = 0
 p_choice = False
 p_newgame = False
-game_rerun =True
+game_status =True
 game_run = True
 game_win = False
 game_tie = False
@@ -20,7 +20,8 @@ def show_board():
 
 
 #--------------------------Functions------------------------
-#Check Fuctions
+
+#Check game conditions Fuctions
 def win():
     horizontal_win()
     vertical_win()
@@ -92,7 +93,10 @@ def player_swap(player):
 def player_check():
     global p_move
     while p_move < 1 or p_move > 9:
-        print("Move is not allowed")
+        print("Move has to be between 1-9")
+        p_move = int(input("Your move : "))
+    while game_board[p_move-1] != "-":
+        print("Tile already been chosen")
         p_move = int(input("Your move: "))
 
 
@@ -100,7 +104,7 @@ def player_newgame():
     global turn
     global p_choice
     global game_run
-    global game_rerun
+    global game_status
     global game_win
     global game_tie
     global game_board
@@ -112,7 +116,7 @@ def player_newgame():
         game_tie = False
         game_board = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
     else:
-        game_rerun = False
+        game_status = False
 
 
 #Game Functions
@@ -146,5 +150,6 @@ def run():
 
 
 #--------------------------Game------------------------
-while game_rerun == True:
+
+while game_status == True:
     run()
